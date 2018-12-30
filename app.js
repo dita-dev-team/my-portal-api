@@ -19,6 +19,12 @@ app.use(function(req,res,next){
     }
     next();
 });
+
+firebaseAdmin.initializeApp({
+    credential: firebaseAdmin.credential.cert(serviceAccount),
+    databaseURL: "https://my-portal-e90f4.firebaseio.com"
+});
+
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
