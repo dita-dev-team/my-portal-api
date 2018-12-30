@@ -4,7 +4,7 @@
   "description": "WebApi Support for myportal",
   "main": "index.js",
   "scripts": {
-    "test": "npm test",
+    "test": "mocha -- api/**/test/*.js",
     "start": "node server.js"
   },
   "keywords": [
