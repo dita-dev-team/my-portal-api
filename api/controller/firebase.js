@@ -14,18 +14,24 @@ exports.sendNotifications = function(req,res,next){
     messageBody = _this.messageBody;
     messageTopic = _this.messageTopic;
 
-  let messageNotification = {
-      data:{
-          score: messageTitle,
-          time: messageBody
-      },
+  let androidNotification = {
+    android:{
+        ttl: 3600 *1000,
+        priority: 'normal',
+        notification: {
+            title: messageTitle,
+            body: messageBody,
+            icon: 'stock_ticker_update',
+            color: '#1D1124'
+        }
+    },
       topic: messageTopic
   };
-  firebaseAdmin.messaging().send(messageNotification)
+  firebaseAdmin.messaging().send(androidNotification)
       .then(response=>{
           return res.status(200).send({
               message:'Message Sent Successfully',
-              messageBody:messageNotification,
+              messageBody:androidNotification,
               response
           })
       })
