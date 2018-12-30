@@ -7,6 +7,7 @@ require('dotenv').config();
 const firebaseAdmin = require('firebase-admin');
 const serviceAccount = require('./api/config/my-portal-e90f4-firebase-adminsdk-d3oav-f0384ba801');
 const app = express();
+const firebaseRoutes = require('./api/routes/index');
 
 app.use(function(req,res,next){
     res.header("Access-Control-Allow-Origin","*");
@@ -29,7 +30,7 @@ app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 app.use(cors());
-
+app.use('/api/v1',firebaseRoutes);
 app.use(function(req,res,next){
     const error = new Error('Route Not Found');
     error.status = 404;

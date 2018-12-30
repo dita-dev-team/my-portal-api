@@ -21,11 +21,12 @@ exports.sendNotifications = function(req,res,next){
       },
       topic: messageTopic
   };
-  firebaseAdmin.messaging.send(messageNotification)
+  firebaseAdmin.messaging().send(messageNotification)
       .then(response=>{
           return res.status(200).send({
               message:'Message Sent Successfully',
-              messageBody:messageNotification
+              messageBody:messageNotification,
+              response
           })
       })
       .catch(error=>{
