@@ -31,10 +31,14 @@ app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 app.use(cors());
 app.use('/api/v1',firebaseRoutes);
+
 app.use(function(req,res,next){
     const error = new Error('Route Not Found');
     error.status = 404;
     next(error);
+    return res.status(404).send({
+        message:'Route Not Found'
+    })
 });
 app.use(function(err,req,res){
     res.status(err.status || 500);

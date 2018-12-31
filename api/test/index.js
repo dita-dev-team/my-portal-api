@@ -24,7 +24,6 @@ describe('/Testing API Calls',()=>{
    });
 });
 describe('/Should Post Correct Data',()=>{
-
     it('it should send notification on valid request body',(done)=>{
         setTimeout(done,1000);
         let validRequestBody = {
@@ -43,5 +42,22 @@ describe('/Should Post Correct Data',()=>{
                 res.should.have.status(200);
                 done();
             })
-    });
+    })
 });
+describe('/Non-Existent Endpoints',()=>{
+   it('it should reject non-existent endpoints',(done)=>{
+     setTimeout(done,1000);
+     request(server)
+         .get('/api/v1/send')
+         .expect(404)
+         .end((err,res)=>{
+             if(err){
+                 done();
+                 throw err;
+             }
+
+             done();
+         })
+   });
+});
+
