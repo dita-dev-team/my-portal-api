@@ -39,7 +39,7 @@ exports.sendNotifications = function (req, res, next) {
             console.log(error.message);
             return res.status(500)
                 .send({
-                    message: 'Error Occured While Sending Message',
+                    message: 'Error Occurred While Sending Message',
                     error: error.message
                 })
         });
