@@ -94,5 +94,9 @@ describe('/Non-Existent Endpoints',()=>{
              done();
          })
    });
+
+   after(function () {
+       server.close();
+   })
 });
 
