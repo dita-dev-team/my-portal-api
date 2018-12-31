@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
 const firebaseAdmin = require('firebase-admin');
-const serviceAccount = require('./api/config/my-portal-e90f4-firebase-adminsdk-d3oav-f0384ba801');
+const serviceAccount = require('./api/config/service-account');
 const app = express();
 const firebaseRoutes = require('./api/routes/index');
 
