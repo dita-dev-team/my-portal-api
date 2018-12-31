@@ -35,7 +35,7 @@ describe('/Testing API Calls', () => {
             .post('/api/v1/send')
             .set('Authorization', 'Bearer ' + token)
             .send(invalidNotificationBody)
-            .expect(400)
+            .expect(400, done)
     });
 });
 
@@ -73,7 +73,6 @@ describe('/Should Post Correct Data', () => {
 
 describe('/Non-Existent Endpoints', () => {
     it('it should reject non-existent endpoints', (done) => {
-        setTimeout(done, 1000);
         request(server)
             .get('/api/v1/send')
             .expect(404, done)
