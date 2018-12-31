@@ -3,6 +3,12 @@ require('dotenv').config();
 
 let isTokenValid = (req,res,next)=>{
   let token = req.headers['x-access-token'] || req.headers['authorization'];
+  if(token == undefined){
+      return res.status(401).send({
+          message: 'Action Not Authorized, No Access Token Provided',
+          success: false
+      });
+  }
   if(token.startsWith('Bearer ')){
       token = token.slice(7,token.length);
   }
