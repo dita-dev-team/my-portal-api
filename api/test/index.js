@@ -4,6 +4,23 @@ const server = require('../../server');
 let assert = require('chai').assert;
 
 describe('/Testing API Calls',()=>{
+   var token = null;
+   var tokenRequestBody = {
+     email: 'ditadev@daystar.ac.ke',
+     uid : '885ffefef'
+   };
+   before(function(done){
+       request(server)
+           .post('/api/v1/client/access-token')
+           .send(tokenRequestBody)
+           .end(function(err,res){
+              if(!err){
+                  token = res.body.token.accessToken;
+                  done();
+              }
+           });
+
+   });
    it('it should not post data with invalid request body',(done)=>{
      setTimeout(done,1000);
      let invalidNotificationBody = {
@@ -13,17 +30,35 @@ describe('/Testing API Calls',()=>{
      };
      request(server)
          .post('/api/v1/send')
+         .set('Authorization', 'Bearer ' + token)
          .send(invalidNotificationBody)
          .expect(400)
          .end((err,res)=>{
              if(err){
-                  done(err);
+                  throw err;
              }
              done();
          })
    });
 });
 describe('/Should Post Correct Data',()=>{
+    var token = null;
+    var tokenRequestBody = {
+        email: 'ditadev@daystar.ac.ke',
+        uid : '885ffefef'
+    };
+    before(function(done){
+        request(server)
+            .post('/api/v1/client/access-token')
+            .send(tokenRequestBody)
+            .end(function(err,res){
+                if(!err){
+                    token = res.body.token.accessToken;
+                    done();
+                }
+            });
+
+    });
     it('it should send notification on valid request body',(done)=>{
         setTimeout(done,1000);
         let validRequestBody = {
@@ -33,13 +68,13 @@ describe('/Should Post Correct Data',()=>{
         };
         request(server)
             .post('/api/v1/send')
+            .set('Authorization', 'Bearer ' + token)
             .send(validRequestBody)
             .expect(200)
             .end((err,res)=>{
                 if(err){
-                    done(err);
+                    throw err;
                 }
-                res.should.have.status(200);
                 done();
             })
     })
