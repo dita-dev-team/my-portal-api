@@ -22,7 +22,7 @@ describe('/Testing API Calls', () => {
 
     });
     it('it should not post data with invalid request body', (done) => {
-        setTimeout(done, 1000);
+      //  setTimeout(done, 1000);
         let invalidNotificationBody = {
             messageTopic: 'debug',
             messageTitle: 'test'
