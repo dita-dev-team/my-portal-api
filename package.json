@@ -4,7 +4,7 @@
   "description": "WebApi Support for myportal",
   "main": "index.js",
   "scripts": {
-    "test": "mocha -- api/**/test/*.js",
+    "test": "mocha --timeout 15000 --exit api/**/test/*.js",
     "start": "node server.js"
   },
   "keywords": [
