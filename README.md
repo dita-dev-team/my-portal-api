@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/dita-dev-team/my-portal-fcm-api.svg?branch=master)](https://travis-ci.org/dita-dev-team/my-portal-fcm-api)
 
 **Setup Instructions**
 
