@@ -3,28 +3,30 @@ const expect = require('expect');
 const server = require('../../server');
 let assert = require('chai').assert;
 
+let accessToken = null;
+
+beforeEach(function (done) {
+    let tokenRequestBody = {
+        emailAddress: 'mtotodev05@gmail.com',
+        uid: '885ffefef'
+    };
+    request(server)
+        .post('/api/v1/client/access-token')
+        .send(tokenRequestBody)
+        .end(function (err, res) {
+            if (!err) {
+                accessToken = res.body.token.accessToken;
+                done();
+            }
+        });
+
+});
+
 afterEach(function () {
     server.close();
 });
 
 describe('/Testing API Calls', () => {
-    var token = null;
-    var tokenRequestBody = {
-        email: 'ditadev@daystar.ac.ke',
-        uid: '885ffefef'
-    };
-    before(function (done) {
-        request(server)
-            .post('/api/v1/client/access-token')
-            .send(tokenRequestBody)
-            .end(function (err, res) {
-                if (!err) {
-                    token = res.body.token.accessToken;
-                    done();
-                }
-            });
-
-    });
     it('it should not post data with invalid request body', (done) => {
         let invalidNotificationBody = {
             messageTopic: 'debug',
@@ -33,30 +35,14 @@ describe('/Testing API Calls', () => {
         };
         request(server)
             .post('/api/v1/send')
-            .set('Authorization', 'Bearer ' + token)
+            .set('Authorization', 'Bearer ' + accessToken)
             .send(invalidNotificationBody)
             .expect(400, done)
     });
 });
 
 describe('/Should Post Correct Data', () => {
-    var token = null;
-    var tokenRequestBody = {
-        email: 'ditadev@daystar.ac.ke',
-        uid: '885ffefef'
-    };
-    before(function (done) {
-        request(server)
-            .post('/api/v1/client/access-token')
-            .send(tokenRequestBody)
-            .end(function (err, res) {
-                if (!err) {
-                    token = res.body.token.accessToken;
-                    done();
-                }
-            });
 
-    });
     it('it should send notification on valid request body', (done) => {
         let validRequestBody = {
             messageTopic: 'debug',
@@ -65,7 +51,7 @@ describe('/Should Post Correct Data', () => {
         };
         request(server)
             .post('/api/v1/send')
-            .set('Authorization', 'Bearer ' + token)
+            .set('Authorization', 'Bearer ' + accessToken)
             .send(validRequestBody)
             .expect(200, done)
     });
@@ -79,3 +65,13 @@ describe('/Non-Existent Endpoints', () => {
     });
 });
 
+describe('/Fetch All Notifications', () => {
+
+    it('it should fetch all push Notifcations', (done) => {
+
+        request(server)
+            .get('/api/v1/fetch-all')
+            .set('Authorization', 'Bearer ' + accessToken)
+            .expect(200, done);
+    })
+});
