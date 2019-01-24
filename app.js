@@ -25,6 +25,13 @@ firebaseAdmin.initializeApp({
     credential: firebaseAdmin.credential.cert(serviceAccount),
     databaseURL: "https://my-portal-e90f4.firebaseio.com"
 });
+mongoose.connect(process.env.MONGODB_URL,{useNewUrlParser:true},(err)=>{
+    if(err){
+        console.log('Error Connecting To Database',err.message);
+        throw new Error(err.message);
+    }
+    console.log('MongoDB Connected Successfully');
+});
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
