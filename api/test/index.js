@@ -112,4 +112,18 @@ describe('should not send on invalid request body ', () => {
             .expect(401, done);
     })
 });
+describe('should not send without valid accessToken',()=>{
+    let requestBody = {
+        emailAddress: 'mtotodev05@gmail.com'
+    };
+    let invalidAccessToken = 'avsdeg';
+
+    it('should reject request',(done)=>{
+       request(server)
+           .post('/api/v1/fetch-by-email')
+           .set('Authorization', 'Bearer '+invalidAccessToken)
+           .send(requestBody)
+           .expect(401,done);
+    });
+});
 
