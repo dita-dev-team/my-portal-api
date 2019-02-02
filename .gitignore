@@ -4,9 +4,9 @@
 
 # IntelliJ project files
 .idea/
-package-lock.json
 api/config/
 node_modules/
-*.iml
 out
 gen
+*.log
+yarn.lock

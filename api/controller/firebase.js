@@ -1,20 +1,20 @@
 const firebaseAdmin = require('firebase-admin');
-const Message = require('../model/message');
-const mongoose = require('mongoose');
+const database = require('../model/database');
 
-exports.sendNotifications = function (req, res, next) {
-    let _this = req.body;
+exports.sendNotifications = async (req, res, next) => {
+    let payload = req.body;
 
-    if (!(_this.messageBody && _this.messageTitle && _this.messageTopic)) {
+    if (!(payload.messageBody && payload.messageTitle && payload.messageTopic)) {
         return res.status(400).send({
             message: 'Invalid Request Body'
         })
     }
 
     let messageTitle, messageBody, messageTopic;
-    messageTitle = _this.messageTitle;
-    messageBody = _this.messageBody;
-    messageTopic = _this.messageTopic;
+    messageTitle = payload.messageTitle;
+    messageBody = payload.messageBody;
+    messageTopic = payload.messageTopic;
+
 
     let androidNotification = {
         android: {
@@ -29,53 +29,35 @@ exports.sendNotifications = function (req, res, next) {
         },
         topic: 'debug'
     };
-    firebaseAdmin.messaging().send(androidNotification)
-        .then(response => {
-            let message = new Message({
-                _id: new mongoose.Types.ObjectId(),
-                emailAddress: _this.emailAddress,
-                messageTitle: messageTitle,
-                messageBody: messageBody,
-                messageTopic: messageTopic,
-                messageStatus: 'success'
-            });
-            message.save()
-                .then(result=>{
-                    console.log(result);
-                })
-                .catch(error=>{
-                   console.log('Error Saving Records',error.message);
-                });
 
-            return res.status(200).send({
-                message: 'Message Sent Successfully',
-                messageBody: androidNotification,
-                response
-            })
+    let logNotification = async function (email, title, body, topic, status) {
+        // This function does nothing special, It just saves a notification to the db. This is just to avoid
+        // nested try..catch statements
+        try {
+            let result = await database.saveNotification(email, title, body, topic, status);
+            console.log('Saved id: ', result.id)
+        } catch (e) {
+            console.log('Error Saving Records: ', e.message);
+        }
+    };
+
+    try {
+        let response = await firebaseAdmin.messaging().send(androidNotification);
+        // Save successful notification
+        await logNotification(payload.emailAddress, messageTitle, messageBody, messageTopic, 'success');
+        return res.status(200).send({
+            message: 'Message Sent Successfully',
+            messageBody: androidNotification,
+            response
         })
-        .catch(error => {
-            console.log(error.message);
-            let message = new Message({
-                _id: new mongoose.Types.ObjectId(),
-                emailAddress: _this.emailAddress,
-                messageTitle: messageTitle,
-                messageBody: messageBody,
-                messageTopic: messageTopic,
-                messageStatus: 'failed'
-            });
-            message.save()
-                .exec()
-                .then(result=>{
-                    console.log(result);
-                })
-                .catch(error=>{
-                    console.log('Error Saving Records',error.message);
-                });
-
-            return res.status(500)
-                .send({
-                    message: 'Error Occurred While Sending Message',
-                    error: error.message
-                })
-        });
+    } catch (e) {
+        console.log(e.message);
+        // Save failed notification
+        await logNotification(payload.emailAddress, messageTitle, messageBody, messageTopic, 'failed');
+        return res.status(500)
+            .send({
+                message: 'Error Occurred While Sending Message',
+                error: e.message
+            })
+    }
 };

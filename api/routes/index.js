@@ -8,7 +8,7 @@ const {isTokenValid} = require('../auth/auth');
 router.post('/client/access-token', userAuth.generateAccessToken);
 
 router.post('/send', isTokenValid, firebaseAdminController.sendNotifications);
-router.get('/fetch-all',isTokenValid,notificationController.fetchPushNotifications);
-router.post('/fetch-by-email',isTokenValid,notificationController.fetchNotificationByEmailAddress);
+router.get('/fetch-all', isTokenValid, notificationController.fetchPushNotifications);
+router.post('/fetch-by-email', isTokenValid, notificationController.fetchNotificationByEmailAddress);
 
 module.exports = router;

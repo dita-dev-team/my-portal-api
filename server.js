@@ -10,7 +10,7 @@ async function createServer() {
     } catch (e) {
         console.log('Error Creating Server', e.message);
     }
-};
+}
 
 createServer();
 

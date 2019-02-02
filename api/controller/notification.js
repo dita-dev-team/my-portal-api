@@ -1,22 +1,21 @@
-const mongoose = require('mongoose');
-const Message = require('../model/message');
+const database = require('../model/database');
 
 exports.fetchPushNotifications = async (req, res, nex) => {
     try {
-        const pushNotifications = await Message.find();
-        if (pushNotifications.length < 0) {
+        const pushNotifications = await database.fetchAllNotifications();
+        if (pushNotifications.empty) {
             return res.status(404).send({
                 message: 'No notifications found'
             })
         }
-        const messages = await pushNotifications.map(message => {
+        const messages = await pushNotifications.docs.map(message => {
             return {
-                emailAddress: message.emailAddress,
-                messageTitle: message.messageTitle,
-                messageBody: message.messageBody,
-                messageTopic: message.messageTopic,
-                messageStatus: message.messageStatus,
-                createdAt: message.createdAt
+                emailAddress: message.email,
+                messageTitle: message.title,
+                messageBody: message.body,
+                messageTopic: message.topic,
+                messageStatus: message.status,
+                // createdAt: message.createdAt
             }
         });
         res.status(200).send({
@@ -42,21 +41,21 @@ exports.fetchNotificationByEmailAddress = async (req, res, next) => {
             })
         }
 
-        const fetchedMessages = await Message.find({emailAddress: emailAddress});
+        const fetchedMessages = await database.fetchNotificationsByEmail(emailAddress);
 
-        if (fetchedMessages.length<=0) {
+        if (fetchedMessages.empty) {
             return res.status(404).send({
                 message: 'No Notifications Sent By that Email'
             });
         }
-        const messages = await fetchedMessages.map(message => {
+        const messages = await fetchedMessages.docs.map(message => {
             return {
-                emailAddress: message.emailAddress,
-                messageTitle: message.messageTitle,
-                messageBody: message.messageBody,
-                messageTopic: message.messageTopic,
-                messageStatus: message.messageStatus,
-                createdAt: message.createdAt
+                emailAddress: message.email,
+                messageTitle: message.title,
+                messageBody: message.body,
+                messageTopic: message.topic,
+                messageStatus: message.status,
+                // createdAt: message.createdAt
             }
         });
         res.status(200).send({

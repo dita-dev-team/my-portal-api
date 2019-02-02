@@ -1,6 +1,14 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
+let JWT_SECRET;
+try {
+    const functions = require('firebase-functions');
+    JWT_SECRET = functions.config().jwt.key
+} catch (e) {
+    JWT_SECRET = process.env.JWT_SECRET
+}
+
 let isTokenValid = (req, res, next) => {
     let token = req.headers['x-access-token'] || req.headers['authorization'];
     if (token === undefined) {
@@ -13,7 +21,7 @@ let isTokenValid = (req, res, next) => {
         token = token.slice(7, token.length);
     }
     if (token) {
-        jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+        jwt.verify(token, JWT_SECRET, (err, decoded) => {
             if (err) {
                 return res.status(401).send({
                     message: 'Invalid Access Token, Unauthorized',
@@ -30,6 +38,7 @@ let isTokenValid = (req, res, next) => {
         });
     }
 };
+
 module.exports = {
     isTokenValid: isTokenValid
 };

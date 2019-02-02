@@ -5,7 +5,7 @@ let assert = require('chai').assert;
 
 let accessToken = null;
 
-beforeEach(function (done) {
+beforeEach((done) => {
     let tokenRequestBody = {
         emailAddress: 'mtotodev05@gmail.com',
         uid: '885ffefef'
@@ -13,7 +13,7 @@ beforeEach(function (done) {
     request(server)
         .post('/api/v1/client/access-token')
         .send(tokenRequestBody)
-        .end(function (err, res) {
+        .end((err, res) => {
             if (!err) {
                 accessToken = res.body.token.accessToken;
                 done();
@@ -22,7 +22,7 @@ beforeEach(function (done) {
 
 });
 
-afterEach(function () {
+afterEach(() => {
     server.close();
 });
 
@@ -47,7 +47,8 @@ describe('/Should Post Correct Data', () => {
         let validRequestBody = {
             messageTopic: 'debug',
             messageTitle: 'test',
-            messageBody: 'passed test case'
+            messageBody: 'passed test case',
+            emailAddress: 'test@gmail.com',
         };
         request(server)
             .post('/api/v1/send')
@@ -76,7 +77,7 @@ describe('/Fetch All Notifications', () => {
 
 describe('Fetch Notification With Email', () => {
     let requestBody = {
-        emailAddress: 'mtotodev05@gmail.com'
+        emailAddress: 'test@gmail.com'
     };
     it('it should fetch all push notifications by email addresses', (done) => {
         request(server)
