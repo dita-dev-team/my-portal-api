@@ -27,3 +27,23 @@ describe('Test ExcelParser split()', () => {
         expect(result).to.eql(['DICT', '114'])
     });
 });
+
+describe('Test ExcelParser getShift()', () => {
+    it('should return "athi"', () => {
+        let parser = new ExcelParser();
+        let result = parser.getShift('Athi-River Day')
+        assert.equal(result, 'athi')
+    });
+
+    it('should return array "evening"', () => {
+        let parser = new ExcelParser();
+        let result = parser.getShift('Nairobi Evening')
+        assert.equal(result, 'evening')
+    });
+
+    it('should return "day"', () => {
+        let parser = new ExcelParser();
+        let result = parser.getShift('Nairobi Day')
+        assert.equal(result, 'day')
+    });
+});

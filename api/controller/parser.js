@@ -10,4 +10,15 @@ module.exports = class ExcelParser {
             return [text.substring(0, initLen), text.substring(initLen)]
         }
     }
+
+    getShift(text) {
+        let shift = text.toLowerCase();
+        if (shift.includes('athi')) {
+            return 'athi'
+        } else if (shift.includes('evening')) {
+            return 'evening'
+        } else {
+            return 'day'
+        }
+    }
 }
