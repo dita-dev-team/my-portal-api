@@ -47,3 +47,23 @@ describe('Test ExcelParser getShift()', () => {
         assert.equal(result, 'day')
     });
 });
+
+describe('Test ExcelParser formatCourseTitle()', () => {
+    it('should return "ACS-113"', () => {
+        let parser = new ExcelParser();
+        let result = parser.formatCourseTitle('ACS-113')
+        assert.equal(result, 'ACS-113')
+    });
+
+    it('should return "ACS-113" (no hyphen)', () => {
+        let parser = new ExcelParser();
+        let result = parser.formatCourseTitle('ACS113')
+        assert.equal(result, 'ACS-113')
+    });
+
+    it('should return "DICT-114" (no hyphen)', () => {
+        let parser = new ExcelParser();
+        let result = parser.formatCourseTitle('DICT114')
+        assert.equal(result, 'DICT-114')
+    });
+});

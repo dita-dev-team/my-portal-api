@@ -21,4 +21,13 @@ module.exports = class ExcelParser {
             return 'day'
         }
     }
+
+    formatCourseTitle(text) {
+        if (text.includes('-')) {
+            return text;
+        } else {
+            let initLen = /^[a-zA-Z]{3}\d/i.test(text) ? 3 : 4;
+            return text.substring(0, initLen) + '-' + text.substring(initLen);
+        }
+    }
 }
