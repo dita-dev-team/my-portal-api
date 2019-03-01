@@ -8,7 +8,7 @@ exports.saveNotification = (email, title, body, topic, status) => {
     return messagesCollection.add({
         email: email,
         title: title,
-        body: body,
+        body: body, 
         topic: topic,
         status: status
     })

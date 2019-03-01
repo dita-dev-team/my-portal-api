@@ -67,3 +67,49 @@ describe('Test ExcelParser formatCourseTitle()', () => {
         assert.equal(result, 'DICT-114')
     });
 });
+
+describe('Test ExcelParser sanitize Course Codes', () => {
+
+    it('it should return an array length of (1) given ACS101A', () => {
+        let excelParser = new ExcelParser();
+        let result = excelParser.sanitize('ACS101A');
+        assert.equal(result.length, 1);
+    });
+
+    it('it should return an array length of (2) given ACS101A/B', () => {
+        let excelParser = new ExcelParser();
+        let result = excelParser.sanitize('ACS101A/B');
+        assert.equal(result.length,2);
+    });
+
+    it('it should return an array length of (2) given ACS101A/ACS101B',()=>{
+        let excelParser = new ExcelParser();
+        let result = excelParser.sanitize('ACS101A/ACS101B');
+        assert.equal(result.length,2);
+    });
+
+    it('it should return an array length of (2) given ACS101/ACS101B',()=>{
+        let excelParser = new ExcelParser();
+        let result = excelParser.sanitize('ACS101/ACS101B');
+        assert.equal(result.length,2);
+    });
+
+    it('it should return an array length of (4) given ACS111/219/319/419',()=>{
+        let excelParser = new ExcelParser();
+        let result = excelParser.sanitize('ACS111/219/319/419');
+        assert.equal(result.length,4);
+    });
+
+    it('it should return an array length of (4) given ACS111/219/319/419A',()=>{
+        let excelParser = new ExcelParser();
+        let result  = excelParser.sanitize('ACS111/219/319/419A');
+        assert.equal(result.length,4);
+    });
+
+    it('it should return an array with length of (2) given ACS261/MIS224B',()=>{
+        let excelParser = new ExcelParser();
+        let result = excelParser.sanitize('ACS261/MIS224B');
+        assert.equal(result.length,2);
+    })
+
+});
