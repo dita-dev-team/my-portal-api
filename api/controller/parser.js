@@ -115,5 +115,9 @@ module.exports = class ExcelParser {
         }
 
         return chunks
+    };
+
+    stringToDate($text){
+        let dateTime = null;
     }
 };
