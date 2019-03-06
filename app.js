@@ -5,6 +5,7 @@ const cors = require('cors');
 require('dotenv').config();
 const firebaseAdmin = require('firebase-admin');
 const serviceAccount = require('./api/config/service-account');
+const fileUpload = require('express-fileupload');
 
 firebaseAdmin.initializeApp({
     credential: firebaseAdmin.credential.cert(serviceAccount),
@@ -12,7 +13,7 @@ firebaseAdmin.initializeApp({
 });
 
 const app = express();
-const firebaseRoutes = require('./api/routes/index');
+const routes = require('./api/routes/index');
 
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
@@ -30,7 +31,10 @@ app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(cors());
-app.use('/api/v1', firebaseRoutes);
+app.use('/api/v1', routes);
+app.use(fileUpload({
+    limits: { fileSize: 8 * 1024 * 1024 },
+}));
 
 app.use((req, res, next) => {
     const error = new Error('Route Not Found');

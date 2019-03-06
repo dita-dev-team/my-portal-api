@@ -1,22 +1,58 @@
 const request = require('supertest');
-const expect = require('expect');
 const server = require('../../server');
-const assert = require('chai').assert;
 
+let accessToken = null;
 
+beforeEach((done) => {
+    let tokenRequestBody = {
+        emailAddress: 'mtotodev05@gmail.com',
+        uid: '885ffefef'
+    };
+    request(server)
+        .post('/api/v1/client/access-token')
+        .send(tokenRequestBody)
+        .end((err, res) => {
+            if (!err) {
+                accessToken = res.body.token.accessToken;
+                done();
+            }
+        });
+
+});
 
 afterEach(() => {
     server.close();
 });
 
 describe('Test Excel API calls', () => {
-    it('should not accept non excel files', (done) => {
-        assert.isTrue(false);
-        done();
+    it('a file must be uploaded', (done) => {
+        request(server)
+            .post('/api/v1/excel/upload')
+            .set('Authorization', 'Bearer ' + accessToken)
+            .expect(400, 'No files were uploaded.', done)
     });
 
-    it('should upload excel file successfully', (done) => {
-        assert.isTrue(false);
-        done();
+    it('should not accept non excel files', (done) => {
+        request(server)
+            .post('/api/v1/excel/upload')
+            .set('Authorization', 'Bearer ' + accessToken)
+            .attach('excel', 'api/test/files/image.jpg')
+            .expect(400, 'Invalid file type.', done)
+    });
+
+    it('should upload excel file successfully (xlsx)', (done) => {
+        request(server)
+            .post('/api/v1/excel/upload')
+            .set('Authorization', 'Bearer ' + accessToken)
+            .attach('excel', 'api/test/files/excel-new.xlsx')
+            .expect(200, done)
+    });
+
+    it('should upload excel file successfully (xls)', (done) => {
+        request(server)
+            .post('/api/v1/excel/upload')
+            .set('Authorization', 'Bearer ' + accessToken)
+            .attach('excel', 'api/test/files/excel-new1.xls')
+            .expect(200, done)
     });
 });
