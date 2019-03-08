@@ -6,6 +6,7 @@
 .idea/
 api/config/
 node_modules/
+package-lock.json
 out
 gen
 *.log
