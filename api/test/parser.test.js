@@ -221,12 +221,12 @@ describe('Test Reading & Parsing stringToDate()', () => {
         assert.isNotNull(details);
         assert.isNotEmpty(details);
         expect(details).to.contain.keys('shift', 'room', 'dateTime');
-        expect(details['room']).to.equal('LR13');
+        expect(details['room']).to.equal('LR14');
     })
 });
 
 
-describe('Test Reading & Parsing copyToDb()', () => {
+describe('Test Reading & Parsing extractData()', () => {
     function hasNames(arr, ...names) {
         let size = names.length;
         let set = new Set(names);
@@ -246,7 +246,7 @@ describe('Test Reading & Parsing copyToDb()', () => {
     it('August 2017 is parsed successfully', () => {
         let data = fs.readFileSync('api/test/files/excel-new1.xls');
         let excelParser = new ExcelParser();
-        excelParser.copyToDb(data);
+        excelParser.extractData(data);
         assert.isNotNull(excelParser.units)
         assert.isNotEmpty(excelParser.units);
         assert.isTrue(hasNames(excelParser.units, 
@@ -257,7 +257,7 @@ describe('Test Reading & Parsing copyToDb()', () => {
     it('January 2018 is parsed successfully', () => {
         let data = fs.readFileSync('api/test/files/excel-new3.xls');
         let excelParser = new ExcelParser();
-        excelParser.copyToDb(data);
+        excelParser.extractData(data);
         assert.isNotNull(excelParser.units)
         assert.isNotEmpty(excelParser.units);
         assert.isTrue(hasNames(excelParser.units, 
@@ -268,7 +268,7 @@ describe('Test Reading & Parsing copyToDb()', () => {
     it('June 2018 is parsed successfully', () => {
         let data = fs.readFileSync('api/test/files/excel-new4.xls');
         let excelParser = new ExcelParser();
-        excelParser.copyToDb(data);
+        excelParser.extractData(data);
         assert.isNotNull(excelParser.units)
         assert.isNotEmpty(excelParser.units);
         assert.isTrue(hasNames(excelParser.units, 
@@ -279,7 +279,7 @@ describe('Test Reading & Parsing copyToDb()', () => {
     it('August 2018 is parsed successfully', () => {
         let data = fs.readFileSync('api/test/files/excel-new5.xls');
         let excelParser = new ExcelParser();
-        excelParser.copyToDb(data);
+        excelParser.extractData(data);
         assert.isNotNull(excelParser.units)
         assert.isNotEmpty(excelParser.units);
         assert.isTrue(hasNames(excelParser.units, 

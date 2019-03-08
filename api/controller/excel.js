@@ -1,4 +1,5 @@
 const ExcelParser = require('./parser')
+const database = require('../model/database');
 
 exports.uploadExcelFile = async (req, res, next) => {
     if (!req.files || Object.keys(req.files).length === 0) {
@@ -12,7 +13,11 @@ exports.uploadExcelFile = async (req, res, next) => {
     }
 
     let parser = new ExcelParser();
-    parser.copyToDb(file.buffer);
+    parser.extractData(file.buffer);
+    if (parser.units.length > 0) {
+        await database.clearExamSchedule();
+        await database.setExamSchedule(parser.units);
+    }
 
     res.status(200).send('Success.')
 }

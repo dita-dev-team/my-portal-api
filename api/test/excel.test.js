@@ -1,5 +1,6 @@
 const request = require('supertest');
 const server = require('../../server');
+const database = require('../model/database');
 
 let accessToken = null;
 
@@ -22,6 +23,10 @@ beforeEach((done) => {
 
 afterEach(() => {
     server.close();
+});
+
+after(async () => {
+    await database.clearExamSchedule();
 });
 
 describe('Test Excel API calls', () => {

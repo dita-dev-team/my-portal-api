@@ -10,7 +10,7 @@ module.exports = class ExcelParser {
         this.units = [];
     }
 
-    copyToDb(data) {
+    async extractData(data) {
         let workbook = XLSX.read(data, {type:'buffer'});
         for(let s = 0; s < workbook.SheetNames.length; s++) {
             let sheetName = workbook.SheetNames[s];
@@ -53,7 +53,6 @@ module.exports = class ExcelParser {
                 this.i++;
             }
         }
-        // Do something with units
     }
 
     getDetails(sheetName, sheet) {
@@ -61,7 +60,7 @@ module.exports = class ExcelParser {
         let dateTimeDetails = this.getDateTimeDetails(sheet);
         dateTimeDetails = this.stringToDate(dateTimeDetails);
         dateTimeDetails.subtract(2, 'hours');
-        let room = sheet[this.i-1][0];
+        let room = sheet[this.i][0];
         if (room.includes('empty')) {
             room = 'NO ROOM';
         }
