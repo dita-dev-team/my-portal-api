@@ -1,4 +1,5 @@
 const admin = require('firebase-admin');
+const moment = require('moment');
 const settings = {timestampsInSnapshots: true}; // Handle issue https://github.com/firebase/firebase-js-sdk/issues/726
 const db = admin.firestore();
 db.settings(settings);
@@ -36,6 +37,23 @@ exports.setExamSchedule = (units) => {
         promises.push(writeToDb(c));
     }
     return Promise.all(promises);
+}
+
+exports.getExamSchedule = async (names, shift) => {
+    let queries = names.map(name => {
+        return examCollection.where('name', '==', name)
+                             .where('shift', '==', shift)
+                             .limit(1)
+                             .get()
+    })
+    let results = await Promise.all(queries);
+    let data = results.filter(result => !result.empty)
+                      .map(result => result.docs[0].data())
+    for(let item of data) {
+        let temp = moment(item.date.toDate());
+        item.date = temp.format('YYYY-MM-DD HH:mm:ss')
+    }
+    return data;
 }
   
 async function deleteQueryBatch(db, query, batchSize) {
