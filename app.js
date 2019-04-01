@@ -1,7 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
-const cors = require('cors');
+const cors = require('cors')({origin: true});
 require('dotenv').config();
 const firebaseAdmin = require('firebase-admin');
 const serviceAccount = require('./api/config/service-account');
@@ -15,22 +15,22 @@ firebaseAdmin.initializeApp({
 const app = express();
 const routes = require('./api/routes/index');
 
-app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers",
-        "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+// app.use((req, res, next) => {
+//     res.header("Access-Control-Allow-Origin", "*");
+//     res.header("Access-Control-Allow-Headers",
+//         "Origin, X-Requested-With, Content-Type, Accept, Authorization");
 
-    if (req.method === "OPTIONS") {
-        res.header('Access-Control-Allow-Methods', 'POST,GET');
-        return res.status(200).json({});
-    }
-    next();
-});
+//     if (req.method === "OPTIONS") {
+//         res.header('Access-Control-Allow-Methods', 'POST,GET');
+//         return res.status(200).json({});
+//     }
+//     next();
+// });
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors);
 app.use('/api/v1', routes);
 app.use(fileUpload({
     limits: { fileSize: 8 * 1024 * 1024 },
