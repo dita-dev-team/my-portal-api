@@ -7,4 +7,4 @@ const app = require('./app');
 //  response.send("Hello from Firebase!");
 // });
 
-exports.notifications = functions.https.onRequest(app);
+exports.my = functions.https.onRequest(app);

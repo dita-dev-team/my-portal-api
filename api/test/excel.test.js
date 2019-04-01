@@ -50,7 +50,7 @@ describe('Test Excel API calls', () => {
             .post('/api/v1/excel/upload')
             .set('Authorization', 'Bearer ' + accessToken)
             .attach('excel', 'api/test/files/excel-new.xlsx')
-            .expect(200, done)
+            .expect(200, 'Success.', done)
     });
 
     it('should upload excel file successfully (xls)', (done) => {
@@ -58,6 +58,6 @@ describe('Test Excel API calls', () => {
             .post('/api/v1/excel/upload')
             .set('Authorization', 'Bearer ' + accessToken)
             .attach('excel', 'api/test/files/excel-new1.xls')
-            .expect(200, done)
+            .expect(200, 'Success.', done)
     });
 });
