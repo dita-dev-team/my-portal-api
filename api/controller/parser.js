@@ -146,10 +146,14 @@ module.exports = class ExcelParser {
     }
 
     sanitize(text) {
-        //Remove white spaces
         let coursesArray = [];
-
+        // Remove white spaces
         let courseCode = text.replace(/\s/g, '');
+        // Correct type AAA111B(X)
+        let match = courseCode.match(/(.*)([A-Z]\((.)\))/)
+        if (match) {
+            courseCode = match[1] + match[3]
+        }
         let similarDoubleClasses = /[a-z]{3,4}\d{3}[a-z]\/[a-z]{3,4}\d{3}[a-z]*.*/i; // YYY111A/YYY222A
 
         let lackingClassPrefix = /[a-z]{3,4}[\d]{3}\/[a-z]{3,4}[\d]{3}[a-z]{1}/i; // YYY111/YYY222A

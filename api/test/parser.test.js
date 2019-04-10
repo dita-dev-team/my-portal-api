@@ -286,4 +286,16 @@ describe('Test Reading & Parsing extractData()', () => {
             'ACS-401A', 'PSY-211A', 'MUS-115A', 'CHD-642X', 'DICT-105T', 'MAK-317T', 'ICO-056U', 'MUS-113A', 'COM-445B', 'ACS-261A'
             ));
     })
+
+    it('January 2019 is parsed successfully', () => {
+        let data = fs.readFileSync('api/test/files/excel-new6.xlsx');
+        let excelParser = new ExcelParser();
+        excelParser.extractData(data);
+        assert.isNotNull(excelParser.units)
+        assert.isNotEmpty(excelParser.units);
+        assert.isTrue(hasNames(excelParser.units, 
+            'SWK-317A', 'MIS-313A', 'MUS-419A', 'PSY-408T', 'MAK-423T', 'ICO-049T', 'COM-422T', 'GRA-613Z', 'MCD-606X', 'MCD-612X',
+            'COM-408X', 'COM-408A'
+            ));
+    })
 })
