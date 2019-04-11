@@ -8,8 +8,13 @@ exports.uploadExcelFile = async (req, res, next) => {
     }
 
     let file = req.files[0]
-    if (file.mimetype !== 'application/vnd.ms-excel' && 
-    file.mimetype !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+    const mimetypes = new Set([
+        'application/vnd.ms-excel',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'application/wps-office.xls',
+        'application/wps-office.xlsx'
+    ])
+    if (!mimetypes.has(file.mimetype)) {
         console.error('Received invalid file type.')
         return res.status(400).send('Invalid file type.');
     }
