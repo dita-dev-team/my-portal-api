@@ -39,10 +39,9 @@ exports.setExamSchedule = (units) => {
     return Promise.all(promises);
 }
 
-exports.getExamSchedule = async (names, shift) => {
+exports.getExamSchedule = async (names) => {
     let queries = names.map(name => {
         return examCollection.where('name', '==', name)
-                             .where('shift', '==', shift)
                              .limit(1)
                              .get()
     })
