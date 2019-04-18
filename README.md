@@ -21,10 +21,8 @@
 
 ```
 
-
-
 **Sample Request Body**
-  ````
+```
   
   
   api/v1/send
@@ -34,5 +32,14 @@
    "messageBody":"Test",
    "messageTitle": "Still a Test"
  } 
-      
-  
+ ```
+ 
+ **Running Tests**
+```
+npm test
+```
+To run all tests
+```
+npm test-single api/test/parser.test.js
+```
+To run a single test.
