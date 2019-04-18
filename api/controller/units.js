@@ -29,5 +29,8 @@ exports.getUnits = async (req, res, next) => {
         return res.json([]);
     }
     let data = await database.getExamSchedule(names);
-    return res.json(data);
+    let result = {
+        'results': data
+    }
+    return res.json(result);
 }

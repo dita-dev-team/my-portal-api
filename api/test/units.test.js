@@ -43,7 +43,7 @@ describe('Test Unit API calls', () => {
                 if (err) {
                     //
                 }
-                expect(res.body).to.eql([]);
+                expect(res.body.results).to.eql([]);
                 done();
             })
     });
@@ -58,7 +58,7 @@ describe('Test Unit API calls', () => {
                     //
                 }
                 // expect(res.body).to.eql([]);
-                res.body.should.contain.a.thing.with.property('name', 'AAA-111A')
+                res.body.results.should.contain.a.thing.with.property('name', 'AAA-111A')
                 done();
             })
     });
