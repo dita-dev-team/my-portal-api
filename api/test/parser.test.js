@@ -75,6 +75,32 @@ describe('Test ExcelParser formatCourseTitle()', () => {
     });
 });
 
+describe('Test ExcelParser fixStartTime()', () => {
+    it('should return "8:45am" with suffix', () => {
+        let parser = new ExcelParser();
+        let result = parser.fixStartTime('8:45am', '11:45am')
+        assert.equal(result, '8:45am')
+    });
+
+    it('should return "8:45am" missing suffix', () => {
+        let parser = new ExcelParser();
+        let result = parser.fixStartTime('8:45', '11:45am')
+        assert.equal(result, '8:45am')
+    });
+
+    it('should return "11:45am" missing suffix (crossover)', () => {
+        let parser = new ExcelParser();
+        let result = parser.fixStartTime('11:45', '1:45pm')
+        assert.equal(result, '11:45am')
+    });
+
+    it('should return "11:45pm" missing suffix (crossover)', () => {
+        let parser = new ExcelParser();
+        let result = parser.fixStartTime('11:45', '1:45am')
+        assert.equal(result, '11:45pm')
+    });
+});
+
 describe('Test ExcelParser sanitize Course Codes', () => {
 
     it('it should return an array length of (1) given ACS101A', () => {

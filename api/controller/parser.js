@@ -48,6 +48,7 @@ module.exports = class ExcelParser {
                             this.units.push(unit);
                         }
                     }
+                    this.printOut = false
                     this.j++;
                 }
                 this.i++;
@@ -58,8 +59,10 @@ module.exports = class ExcelParser {
     getDetails(sheetName, sheet) {
         this.shift = this.getShift(sheetName);
         let dateTimeDetails = this.getDateTimeDetails(sheet);
+        if (this.printOut) {
+            console.log(dateTimeDetails);
+        }
         dateTimeDetails = this.stringToDate(dateTimeDetails);
-        dateTimeDetails.subtract(2, 'hours');
         let room = sheet[this.i][0];
         if (room.includes('empty')) {
             room = 'NO ROOM';
@@ -74,7 +77,7 @@ module.exports = class ExcelParser {
     getDateTimeDetails(sheet) {
         let row = this.i;
         let col = this.j;
-        let pattern = /(?:-([\d]+.[\d]+[apm]+))/i
+        let pattern = /(?:(.*)-([\d]+.[\d]+[apm]+))/i
         for (let i = row; i >= 0; i--) {
             let _row = sheet[i];
             let cell = _row[col];
@@ -83,17 +86,47 @@ module.exports = class ExcelParser {
                 continue;
             }
 
+            
 
             let match;
             if ((match = cell.match(pattern)) !== null) {
+                if (this.printOut) {
+                    console.log(match)
+                }
                 let date = this.getDate(sheet, i+1);
                 if (date !== null) {
-                    return `${date} ${match[1].toLowerCase()}`;
+                    let start = match[1];
+                    let end = match[2];
+                    start = this.fixStartTime(start, end);
+                    return `${date} ${start.toLowerCase()}`;
                 }
             }
         }
 
         return null;
+    }
+
+    fixStartTime(start, end) {
+        if(/[a-zA-Z]{2}/i.test(start)) {
+            return start
+        }
+
+        let suffix = end.slice(-2);
+        let noPattern  = /(^[0-9]+)/
+        let startMatch = start.match(noPattern);
+        let endMatch = end.match(noPattern);
+        let st = parseInt(startMatch[1]);
+        let en = parseInt(endMatch[1]);
+
+        if (st < en) {
+            return `${start}${suffix}`
+        } else {
+            if(/[a]/i.test(suffix)) {
+                return `${start}pm`
+            } else {
+                return `${start}am`
+            }
+        }
     }
 
     getDate(sheet, row) {
