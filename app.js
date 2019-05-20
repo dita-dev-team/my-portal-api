@@ -1,7 +1,6 @@
 const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
-const { fileParser } = require('express-multipart-file-parser')
 const cors = require('cors')({origin: true});
 require('dotenv').config();
 const firebaseAdmin = require('firebase-admin');
@@ -18,12 +17,6 @@ const routes = require('./api/routes/index');
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-app.use(fileParser({
-    rawBodyOptions: {
-      limit: '8mb',
-    }
-  })
-);
 app.use(cors);
 app.use('/api/v1', routes);
 app.use((req, res, next) => {
