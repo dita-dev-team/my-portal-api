@@ -4,17 +4,21 @@ module.exports = class DarajaHelper {
 
     httpResponseBodyProcessor(responseData, req, res, next) {
         console.log(JSON.stringify(responseData));
-        if (!responseData.body.fault || !responseData.body.errorCode || !responseData.error || !this.isEmpty(responseData.body.status)) {
+        if (!responseData.body.fault && !responseData.body.errorCode && !responseData.error) {
             req.transactionResponse = responseData.body;
             return res.status(200).send({
                 message: 'Transaction sent for processing',
-                transactionStatus: 'Processing'
+                transactionStatus: responseData.body.ResponseDescription,
+                responseCode: responseData.body.ResponseCode,
+                merchantRequestId: responseData.body.MerchantRequestID,
+                checkoutRequestId: responseData.body.CheckoutRequestID
             })
         } else {
             return res.status(500).send({
                 message: 'Internal Server Error',
+                requestId:responseData.body.requestId,
                 errorCode: responseData.body.errorCode,
-                error: responseData.error
+                errorMessage: responseData.body.errorMessage,
             })
         }
     }
