@@ -19,6 +19,7 @@
   "author": "Kamau Brian, Michael Bukachi",
   "license": "MIT",
   "dependencies": {
+    "axios": "^0.18.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "busboy": "^0.3.1",
@@ -33,6 +34,7 @@
     "jsonwebtoken": "^8.4.0",
     "moment": "^2.24.0",
     "morgan": "^1.9.1",
+    "request": "^2.88.0",
     "xlsx": "^0.14.1"
   },
   "devDependencies": {
@@ -40,7 +42,7 @@
     "chai-like": "^1.1.1",
     "chai-things": "^0.2.0",
     "cross-env": "^5.2.0",
-    "eslint": "^5.13.0",
+    "eslint": "^5.16.0",
     "eslint-plugin-promise": "^4.0.1",
     "expect": "^24.1.0",
     "mocha": "^5.2.0",

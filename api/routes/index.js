@@ -9,6 +9,8 @@ const unitsController = require('../controller/units');
 const outlookController = require('../controller/outlook');
 const { fileParser } = require('express-multipart-file-parser')
 const basicAuth = require('express-basic-auth');
+const darajaAuth = require('../auth/daraja/daraja-api-auth');
+const darajaController = require('../controller/LipaNaMpesaHandler');
 const rawBodyOptions = {
     rawBodyOptions: {
       limit: '8mb',
@@ -25,4 +27,8 @@ router.post('/hooks', basicAuth({
     users: { 'admin': 'supersecret' }
 }), outlookController.webHook);
 
+
+router.get('/payments/auth',darajaAuth.generateApiAccessToken);
+
+router.post('/process/payment',darajaController.initiateRequest,darajaAuth.generateApiAccessToken,darajaController.processTransaction);
 module.exports = router;

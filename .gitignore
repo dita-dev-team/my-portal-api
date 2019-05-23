@@ -10,4 +10,8 @@ package-lock.json
 out
 gen
 *.log
+api/config/.env
+credentials.tar
 yarn.lock
+/service-account.json
+/.env
