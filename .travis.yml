@@ -4,9 +4,11 @@ node_js:
   - "8"
 dist: trusty
 before_install:
-  - openssl aes-256-cbc -K $encrypted_ed9918fab907_key -iv $encrypted_ed9918fab907_iv -in service-account.json.enc -out service-account.json -d
+  - openssl aes-256-cbc -K $encrypted_5880cf525281_key -iv $encrypted_5880cf525281_iv -in credentials.tar.enc -out credentials.tar -d
+  - tar xvf credentials.tar
   - mkdir -p api/config
-  - cp service-account.json api/config
+  - cp credentials/api/config/service-account.json api/config
+  - cp credentials/api/config/.env .env
 
 before_script: yarn install
 script: yarn test
