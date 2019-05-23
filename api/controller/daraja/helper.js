@@ -3,7 +3,6 @@ const request = require('request');
 module.exports = class DarajaHelper {
 
     httpResponseBodyProcessor(responseData, req, res, next) {
-        console.log(JSON.stringify(responseData));
         if (!responseData.body.fault && !responseData.body.errorCode && !responseData.error) {
             req.transactionResponse = responseData.body;
             return res.status(200).send({

@@ -4,7 +4,7 @@ require('dotenv').config();
 
 exports.initiateRequest = async (req, res, next) => {
     let _this = req.body;
-    if (!(_this.amount || _this.phoneNumber || _this.callBackURL || _this.accountReference || this.description)) {
+    if (!_this.amount || !_this.phoneNumber || !_this.callBackURL || !_this.accountReference || !_this.description) {
         return res.status(400).send({
             message: 'Invalid Request Body',
             requestBody: {

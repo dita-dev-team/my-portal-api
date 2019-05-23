@@ -25,7 +25,6 @@ exports.generateApiAccessToken = async (req, res, next) => {
 
         //let accessTokenResponse = JSON.parse(response.data);
         req.accessToken = response.data.access_token;
-        console.log(req.accessToken);
         next();
     } catch (e) {
         console.log("Error Generating Access Token", e.message);
