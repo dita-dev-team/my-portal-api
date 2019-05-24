@@ -11,6 +11,7 @@ const { fileParser } = require('express-multipart-file-parser')
 const basicAuth = require('express-basic-auth');
 const darajaAuth = require('../auth/daraja/daraja-api-auth');
 const darajaController = require('../controller/LipaNaMpesaHandler');
+const callBackController = require('../controller/daraja/callback');
 const rawBodyOptions = {
     rawBodyOptions: {
       limit: '8mb',
@@ -31,4 +32,5 @@ router.post('/hooks', basicAuth({
 router.get('/payments/auth',darajaAuth.generateApiAccessToken);
 
 router.post('/process/payment',darajaController.initiateRequest,darajaAuth.generateApiAccessToken,darajaController.processTransaction);
+router.post('/process/callback',callBackController.loadTransactionCallBack);
 module.exports = router;

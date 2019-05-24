@@ -1,8 +1,6 @@
-const admin = require('firebase-admin');
 const moment = require('moment');
-const settings = {timestampsInSnapshots: true}; // Handle issue https://github.com/firebase/firebase-js-sdk/issues/726
-const db = admin.firestore();
-db.settings(settings);
+const db = require('./abstract.database');
+
 const messagesCollection = db.collection('messages');
 const examCollection = db.collection(process.env.NODE_ENV === 'test' ? 'exam_schedule_test' : 'exam_schedule')
 

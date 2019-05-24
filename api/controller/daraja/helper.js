@@ -23,7 +23,7 @@ module.exports = class DarajaHelper {
     }
 
     isEmpty(val) {
-        return (val === undefined || val == null || val.length <= 0)
+        return (val === undefined || val === null || val.length <= 0)
     }
 
     sendTransactionToDaraja(transactionDetails, req, res, next) {
