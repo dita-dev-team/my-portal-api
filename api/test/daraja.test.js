@@ -74,7 +74,12 @@ describe('Testing endpoints', () => {
             })
     });
 
-    // On Successful Stk Push,
+
+    /*
+    @Params
+    * Note: This test will occasionally fail, and return 500 error code instead of 200. This is because of the highly unstable status
+    * of the Daraja Sandbox API. If Travis CI fails, rebuild tests from the travis Dashboard.
+    * */
     it('it should return (200) on successful transaction processing', (done) => {
         request(server)
             .post('/api/v1/process/payment')
