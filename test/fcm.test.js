@@ -1,6 +1,6 @@
 const request = require('supertest');
 const expect = require('expect');
-const server = require('../../server');
+const server = require('../server');
 let assert = require('chai').assert;
 
 let accessToken = null;

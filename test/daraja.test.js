@@ -1,8 +1,8 @@
 const request = require('supertest');
 const expect = require('expect');
-const server = require('../../server');
+const server = require('../server');
 const chai = require('chai');
-const ticketModel = require('../model/ticket-payment.model');
+const ticketModel = require('../api/model/ticket-payment.model');
 const assert = chai.expect;
 
 chai.use(require('chai-like'));

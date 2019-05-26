@@ -4,7 +4,7 @@
   "description": "WebApi Support for myportal",
   "main": "index.js",
   "scripts": {
-    "test": "cross-env NODE_ENV=test mocha --timeout 30000 --exit api/**/test/*.js",
+    "test": "cross-env NODE_ENV=test mocha --timeout 30000 --exit test/**/*.js",
     "test-single": "cross-env NODE_ENV=test mocha --timeout 30000 --exit",
     "start": "node server.js",
     "lint": "eslint .",
@@ -16,6 +16,9 @@
   "keywords": [
     "web"
   ],
+  "repository": {
+    "url": "https://github.com/dita-dev-team/my-portal-api"
+  },
   "author": "Kamau Brian, Michael Bukachi",
   "license": "MIT",
   "dependencies": {
@@ -35,7 +38,7 @@
     "moment": "^2.24.0",
     "morgan": "^1.9.1",
     "request": "^2.88.0",
-    "xlsx": "^0.14.1"
+    "xlsx": "^0.14.3"
   },
   "devDependencies": {
     "chai": "^4.2.0",

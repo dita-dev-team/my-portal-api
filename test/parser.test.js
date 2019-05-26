@@ -1,10 +1,10 @@
 const fs = require('fs');
-const moment = require('moment');
+const moment = require('moment/moment');
 const XLSX = require('xlsx');
 const chai = require('chai');
 const expect = chai.expect;
 const assert = chai.assert;
-const ExcelParser = require('../controller/parser')
+const ExcelParser = require('../api/controller/parser')
 
 chai.use(require('chai-like'));
 chai.use(require('chai-things'));
@@ -159,7 +159,7 @@ describe('Test ExcelParser sanitize Course Codes', () => {
 
 describe('Test Reading & Parsing getDate()', () => {
     it('valid date is returned', () => {
-        let data = fs.readFileSync('api/test/files/excel-new.xlsx');
+        let data = fs.readFileSync('test/files/excel-new.xlsx');
         let workbook = XLSX.read(data, {type:'buffer'});
         let sheetName = workbook.SheetNames[0];
         let worksheet = workbook.Sheets[sheetName];
@@ -180,7 +180,7 @@ describe('Test Reading & Parsing getDate()', () => {
 
 describe('Test Reading & Parsing getDateTimeDetails()', () => {
     it('valid datetime is returned', () => {
-        let data = fs.readFileSync('api/test/files/excel-new.xlsx');
+        let data = fs.readFileSync('test/files/excel-new.xlsx');
         let workbook = XLSX.read(data, {type:'buffer'});
         let sheetName = workbook.SheetNames[0];
         let worksheet = workbook.Sheets[sheetName];
@@ -230,7 +230,7 @@ describe('Test Reading & Parsing stringToDate()', () => {
 
 describe('Test Reading & Parsing stringToDate()', () => {
     it('valid details are returned', () => {
-        let data = fs.readFileSync('api/test/files/excel-new.xlsx');
+        let data = fs.readFileSync('test/files/excel-new.xlsx');
         let workbook = XLSX.read(data, {type:'buffer'});
         let sheetName = workbook.SheetNames[0];
         let worksheet = workbook.Sheets[sheetName];
@@ -270,7 +270,7 @@ describe('Test Reading & Parsing extractData()', () => {
     }
 
     it('August 2017 is parsed successfully', () => {
-        let data = fs.readFileSync('api/test/files/excel-new1.xls');
+        let data = fs.readFileSync('test/files/excel-new1.xls');
         let excelParser = new ExcelParser();
         excelParser.extractData(data);
         assert.isNotNull(excelParser.units)
@@ -281,7 +281,7 @@ describe('Test Reading & Parsing extractData()', () => {
     })
 
     it('January 2018 is parsed successfully', () => {
-        let data = fs.readFileSync('api/test/files/excel-new3.xls');
+        let data = fs.readFileSync('test/files/excel-new3.xls');
         let excelParser = new ExcelParser();
         excelParser.extractData(data);
         assert.isNotNull(excelParser.units)
@@ -292,7 +292,7 @@ describe('Test Reading & Parsing extractData()', () => {
     })
 
     it('June 2018 is parsed successfully', () => {
-        let data = fs.readFileSync('api/test/files/excel-new4.xls');
+        let data = fs.readFileSync('test/files/excel-new4.xls');
         let excelParser = new ExcelParser();
         excelParser.extractData(data);
         assert.isNotNull(excelParser.units)
@@ -303,7 +303,7 @@ describe('Test Reading & Parsing extractData()', () => {
     })
 
     it('August 2018 is parsed successfully', () => {
-        let data = fs.readFileSync('api/test/files/excel-new5.xls');
+        let data = fs.readFileSync('test/files/excel-new5.xls');
         let excelParser = new ExcelParser();
         excelParser.extractData(data);
         assert.isNotNull(excelParser.units)
@@ -314,7 +314,7 @@ describe('Test Reading & Parsing extractData()', () => {
     })
 
     it('January 2019 is parsed successfully', () => {
-        let data = fs.readFileSync('api/test/files/excel-new6.xlsx');
+        let data = fs.readFileSync('test/files/excel-new6.xlsx');
         let excelParser = new ExcelParser();
         excelParser.extractData(data);
         assert.isNotNull(excelParser.units)
