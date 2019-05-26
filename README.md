@@ -40,6 +40,6 @@ npm test
 ```
 To run all tests
 ```
-npm test-single test/parser.test.js
+npm run test-single test/parser.test.js
 ```
 To run a single test.
