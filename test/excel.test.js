@@ -1,6 +1,6 @@
 const request = require('supertest');
-const server = require('../../server');
-const database = require('../model/database');
+const server = require('../server');
+const database = require('../api/model/database');
 
 let accessToken = null;
 
@@ -41,7 +41,7 @@ describe('Test Excel API calls', () => {
         request(server)
             .post('/api/v1/excel/upload')
             .set('Authorization', 'Bearer ' + accessToken)
-            .attach('excel', 'api/test/files/image.jpg')
+            .attach('excel', 'test/files/image.jpg')
             .expect(400, 'Invalid file type.', done)
     });
 
@@ -49,7 +49,7 @@ describe('Test Excel API calls', () => {
         request(server)
             .post('/api/v1/excel/upload')
             .set('Authorization', 'Bearer ' + accessToken)
-            .attach('excel', 'api/test/files/excel-new.xlsx')
+            .attach('excel', 'test/files/excel-new.xlsx')
             .expect(200, 'Success.', done)
     });
 
@@ -57,7 +57,7 @@ describe('Test Excel API calls', () => {
         request(server)
             .post('/api/v1/excel/upload')
             .set('Authorization', 'Bearer ' + accessToken)
-            .attach('excel', 'api/test/files/excel-new1.xls')
+            .attach('excel', 'test/files/excel-new1.xls')
             .expect(200, 'Success.', done)
     });
 });

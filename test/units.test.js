@@ -1,8 +1,8 @@
 const request = require('supertest');
-const server = require('../../server');
+const server = require('../server');
 const chai = require('chai');
 const expect = chai.expect;
-const database = require('../model/database');
+const database = require('../api/model/database');
 chai.use(require('chai-like'));
 chai.should();
 chai.use(require('chai-things'));
