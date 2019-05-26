@@ -71,7 +71,7 @@ exports.loadTransactionCallBack = async (req, res, next) => {
             "ResponseDesc": "success"
         };
 
-        res.json(message);
+        res.status(200).send(message);
     } catch (e) {
         console.error(e.message);
         res.status(500).send({
