@@ -1,7 +1,7 @@
 const database = require('./abstract.database');
 const paymentsCollection = database.collection(process.env.NODE_ENV === 'test' ? 'events_payments_test' : 'events_payments');
 const moment = require('moment');
-
+const Utils = require('./utils/utils');
 const failedTransactions = database.collection(process.env.NODE_ENV === 'test' ? 'failed_events_payments_test' : 'failed_event_payments')
 
 exports.savePaymentTransaction = async (studentAdmissionNumber, eventId, transactionCode, transactionAmount, transactionStatus, transactionTimestamp, transactionPhoneNumber) => {
@@ -47,15 +47,19 @@ exports.fetchTransactionByAdmissionNumber = async (admissionNumber) => {
 };
 
 exports.fetchFailedTransactionsByAdmisionNumber = async (admissionNumber) => {
-    return await failedTransactions.where('studentAdmissionNumber','==',admissionNumber).get();
+    return await failedTransactions.where('studentAdmissionNumber', '==', admissionNumber).get();
 };
 
-async function writeDatabase(array) {
-    console.log(`Writing ${array.length} to firestore`);
-    let batch = paymentsCollection.batch();
-    for(let items of array){
-        let reference = paymentsCollection.doc();
-        batch.set(reference,items);
-    }
-    return await batch.commit();
-}
+exports.clearPaymentsCollection = () => {
+    let utils = new Utils();
+    let batchSize = 100;
+    let query = paymentsCollection.orderBy('studentAdmissionNumber').limit(batchSize);
+    return utils.deleteQueryBatch(database, query, batchSize)
+};
+
+exports.clearFailedPaymentsCollection = () => {
+    let utils = new Utils();
+    let batchSize = 100;
+    let query = failedTransactions.orderBy('studentAdmissionNumber').limit(batchSize);
+    return utils.deleteQueryBatch(database, query, batchSize)
+};

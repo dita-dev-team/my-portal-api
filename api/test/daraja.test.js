@@ -2,6 +2,7 @@ const request = require('supertest');
 const expect = require('expect');
 const server = require('../../server');
 const chai = require('chai');
+const ticketModel = require('../model/ticket-payment.model');
 const assert = chai.expect;
 
 chai.use(require('chai-like'));
@@ -10,7 +11,12 @@ chai.use(require('chai-things'));
 
 afterEach(() => {
     server.close();
-})
+});
+
+after(async () => {
+    await ticketModel.clearPaymentsCollection();
+    await ticketModel.clearFailedPaymentsCollection();
+});
 
 const validRequestBody = {
     amount: "200",
@@ -36,7 +42,63 @@ const invalidRequestParameters = {
 
 };
 
-describe('Testing endpoints', () => {
+let successfulTransactionRequestBody = {
+    Body: {
+        stkCallback: {
+            MerchantRequestID: "25594-4987038-1",
+            CheckoutRequestID: "ws_CO_DMZ_357868396_26052019204024858",
+            ResultCode: 0,
+            ResultDesc: "The service request is processed successfully.",
+            CallbackMetadata: {
+                Item: [
+                    {
+                        Name: "Amount",
+                        Value: 1
+                    },
+                    {
+                        Name: "MpesaReceiptNumber",
+                        Value: "NEQ36SSCL3"
+                    },
+                    {
+                        Name: "Balance"
+                    },
+                    {
+                        Name: "TransactionDate",
+                        Value: 20190526204034
+                    },
+                    {
+                        Name: "PhoneNumber",
+                        Value: 254718532419
+                    }
+                ]
+            }
+        }
+    }
+};
+
+let insufficientBalanceRequestBody = {
+    Body: {
+        stkCallback: {
+            MerchantRequestID: "15093-2263932-1",
+            CheckoutRequestID: "ws_CO_DMZ_357874748_26052019204553539",
+            ResultCode: 1,
+            ResultDesc: "[MpesaCB - ]The balance is insufficient for the transaction."
+        }
+    }
+};
+
+let cancelledTransactionRequestBody = {
+    Body: {
+        stkCallback: {
+            MerchantRequestID: "18131-4426383-1",
+            CheckoutRequestID: "ws_CO_DMZ_496331003_26052019204908097",
+            ResultCode: 1032,
+            ResultDesc: "[STK_CB - ]Request cancelled by user"
+        }
+    }
+};
+
+describe('Testing Daraja Api endpoints', () => {
     it('it should return (404) on invalid endpoints', (done) => {
         request(server)
             .get('/api/v1/process/payment')
@@ -49,7 +111,7 @@ describe('Testing endpoints', () => {
             .send(invalidRequestBody)
             .expect(400)
             .end((err, res) => {
-                if(err){
+                if (err) {
                     throw err;
                 }
                 assert(res.body.message).to.eql('Invalid Request Body');
@@ -86,13 +148,50 @@ describe('Testing endpoints', () => {
             .send(validRequestBody)
             .expect(200)
             .end((err, res) => {
-                if(err){
+                if (err) {
                     throw err;
                 }
                 assert(res.body.responseCode).to.eql("0");
                 assert(res.body.transactionStatus).to.eql("Success. Request accepted for processing");
                 done();
             })
-    })
+    });
+
 });
+
+describe('Testing Daraja\'s Callback Endpoint', () => {
+
+    it('it should return (400) Bad request on missing query params', (done) => {
+        request(server)
+            .post('/api/v1/process/callback')
+            .send(successfulTransactionRequestBody)
+            .expect(400, done);
+
+    });
+
+    it('it should return (200) on valid, successful transaction', (done) => {
+        request(server)
+            .post('/api/v1/process/callback')
+            .query({deviceId: '5cd8182wfh', eventId: '3ds8798ewf', admissionNumber: '15-1005'})
+            .send(successfulTransactionRequestBody)
+            .expect(200, done);
+    });
+
+    it('it should return (200) on valid, unsuccessful transaction(Insufficient Balance)', (done) => {
+        request(server)
+            .post('/api/v1/process/callback')
+            .query({deviceId: '5cd8182wfh', eventId: '3ds8798ewf', admissionNumber: '15-1005'})
+            .send(insufficientBalanceRequestBody)
+            .expect(200, done);
+    });
+
+    it('it should return (200) on valid, unsuccessful transaction(Cancelled Transaction)', (done) => {
+        request(server)
+            .post('/api/v1/process/callback')
+            .query({deviceId: '5cd8182wfh', eventId: '3ds8798ewf', admissionNumber: '15-1005'})
+            .send(cancelledTransactionRequestBody)
+            .expect(200, done);
+    });
+
+})
 
