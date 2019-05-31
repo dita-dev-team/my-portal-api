@@ -12,6 +12,7 @@ const basicAuth = require('express-basic-auth');
 const darajaAuth = require('../auth/daraja/daraja-api-auth');
 const darajaController = require('../controller/LipaNaMpesaHandler');
 const callBackController = require('../controller/daraja/callback');
+const calendarEventsController = require('../controller/events');
 const rawBodyOptions = {
     rawBodyOptions: {
       limit: '8mb',
@@ -33,4 +34,6 @@ router.get('/payments/auth',darajaAuth.generateApiAccessToken);
 
 router.post('/process/payment',darajaController.initiateRequest,darajaAuth.generateApiAccessToken,darajaController.processTransaction);
 router.post('/process/callback',callBackController.loadTransactionCallBack);
+
+router.get('/events',calendarEventsController.fetchEvents);
 module.exports = router;
