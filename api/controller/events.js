@@ -16,10 +16,10 @@ exports.fetchEvents = async (req, res, next) => {
         const parsedEvents = await fetched.map(event => {
             return {
                 description: event.description,
-                startDate: moment(event.start_date.startDate).format('DD/MM/YYYY HH:mm'),
-                endDate: moment(event.end_date).format("DD/MM/YYYY HH:mm")
+                startDate: event.start_date.toDate(),
+                endDate: event.end_date.toDate()
             }
-        })
+        });
         return res.status(200).send({
             message: 'Fetched Calendar Events',
             events: parsedEvents
