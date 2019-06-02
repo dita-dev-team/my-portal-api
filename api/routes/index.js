@@ -35,5 +35,6 @@ router.get('/payments/auth',darajaAuth.generateApiAccessToken);
 router.post('/process/payment',darajaController.initiateRequest,darajaAuth.generateApiAccessToken,darajaController.processTransaction);
 router.post('/process/callback',callBackController.loadTransactionCallBack);
 
-router.get('/events',calendarEventsController.fetchEvents);
+router.get('/events',isTokenValid,calendarEventsController.fetchEvents);
+router.post('/events/add',isTokenValid,calendarEventsController.addCalendarEvents);
 module.exports = router;

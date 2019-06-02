@@ -1,39 +1,41 @@
 const database = require('./abstract.database');
-let parentCollection = database.collection('calendar');
+let parentCollection = database.collection(process.env.NODE_ENV === 'test' ? 'calendar_tests' : 'calendar');
+const Utils = require('./utils/utils');
 
 exports.fetchCalendarEvents = async () => {
-    /*   let documentArray = [];
-       let eventsArray = [];
-       let parentDocuments = await parentCollection.get();
-       parentDocuments.forEach(documents =>{
-           documentArray.push(documents.id); //Events id, found on the first id.
-       })
-       let references = parentCollection.doc(documentArray[0]);
-       references.getCollections().then(collections => {
-           collections.forEach(async collection => {
-               console.log("Found subcollection: ",collection.id);
-               let documents = await collection.get();
-               console.log(documents);
-               documents.forEach(doc=>{
-                   console.log(doc.data())
-                   return eventsArray.push(doc.data());
-               })
-           })
-       })*/
+
     try {
         let documentsArray = [];
         let fetchedParentDocuments = await parentCollection.get();
         fetchedParentDocuments.forEach(documents => {
             documentsArray.push(documents.id);
         });
-        let eventsParentDocument = parentCollection.doc(documentsArray[0]);
+        let eventsParentDocument = parentCollection.doc(process.env.NODE_ENV === 'test' ? 'eventspath' : documentsArray[0]);
         let eventSubCollection = await eventsParentDocument.getCollections();
-        /*let collection = await eventSubCollection.forEach(async subCollection => {
-            let documents = await subCollection.get();
-        });*/
+
         return await eventSubCollection[0].get();
 
     } catch (e) {
         console.error("Error Fetching Calendar Events", e.message);
     }
-}
+};
+
+exports.addCalendarEvents = async (description,startDate, endDate) => {
+    try {
+        return await parentCollection.doc('eventspath').collection('events').add({
+            description: description,
+            start_date: startDate,
+            end_date: endDate
+        })
+
+    } catch (e) {
+        console.error("Error Adding Calendar Events", e.message);
+    }
+};
+
+exports.clearCalendarEvents = () => {
+    let utils = new Utils();
+    let batchSize = 100;
+    let query = parentCollection.doc('eventspath').collection('events').orderBy('start_date').limit(batchSize);
+    return utils.deleteQueryBatch(database, query, batchSize)
+};
