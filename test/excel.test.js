@@ -1,23 +1,21 @@
 const request = require('supertest');
 const server = require('../server');
 const database = require('../api/model/database');
+const connectFirebase = require('./firebase');
+const firebase = require('firebase');
 
 let accessToken = null;
 
-beforeEach(done => {
-  let tokenRequestBody = {
-    emailAddress: 'mtotodev05@gmail.com',
-    uid: '885ffefef',
-  };
-  request(server)
-    .post('/api/v1/client/access-token')
-    .send(tokenRequestBody)
-    .end((err, res) => {
-      if (!err) {
-        accessToken = res.body.token.accessToken;
-        done();
-      }
-    });
+before(async () => {
+  let email = process.env.TEST_EMAIL;
+  let password = process.env.TEST_PASSWORD;
+  connectFirebase();
+  try {
+    await firebase.auth().signInWithEmailAndPassword(email, password);
+    accessToken = await firebase.auth().currentUser.getIdToken();
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 afterEach(() => {

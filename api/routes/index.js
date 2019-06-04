@@ -3,7 +3,7 @@ const router = express.Router();
 const firebaseAdminController = require('../controller/firebase');
 const notificationController = require('../controller/notification');
 const userAuth = require('../controller/user-auth');
-const { isTokenValid } = require('../auth/auth');
+const { validateFirebaseToken } = require('../auth/auth');
 const excelController = require('../controller/excel');
 const unitsController = require('../controller/units');
 const outlookController = require('../controller/outlook');
@@ -20,20 +20,24 @@ const rawBodyOptions = {
 };
 router.post('/client/access-token', userAuth.generateAccessToken);
 
-router.post('/send', isTokenValid, firebaseAdminController.sendNotifications);
+router.post(
+  '/send',
+  validateFirebaseToken,
+  firebaseAdminController.sendNotifications,
+);
 router.get(
   '/fetch-all',
-  isTokenValid,
+  validateFirebaseToken,
   notificationController.fetchPushNotifications,
 );
 router.post(
   '/fetch-by-email',
-  isTokenValid,
+  validateFirebaseToken,
   notificationController.fetchNotificationByEmailAddress,
 );
 router.post(
   '/excel/upload',
-  isTokenValid,
+  validateFirebaseToken,
   fileParser(rawBodyOptions),
   excelController.uploadExcelFile,
 );
@@ -55,7 +59,14 @@ router.post(
   darajaController.processTransaction,
 );
 router.post('/process/callback', callBackController.loadTransactionCallBack);
-router.get('/events',isTokenValid,calendarEventsController.fetchEvents);
-router.post('/events/add',isTokenValid,calendarEventsController.addCalendarEvents);
+router.get(
+  '/events',
+  validateFirebaseToken,
+  calendarEventsController.fetchEvents,
+);
+router.post(
+  '/events/add',
+  validateFirebaseToken,
+  calendarEventsController.addCalendarEvents,
+);
 module.exports = router;
-
