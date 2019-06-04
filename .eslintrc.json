@@ -4,9 +4,10 @@
     "ecmaVersion": 2017
   },
   "plugins": [
-    "promise"
+    "promise",
+    "prettier"
   ],
-  "extends": "eslint:recommended",
+  "extends": ["eslint:recommended", "prettier"],
   "rules": {
     // Removed rule "disallow the use of console" from recommended eslint rules
     "no-console": "off",
@@ -82,6 +83,7 @@
     //Enforces the use of catch() on un-returned promises
     "promise/catch-or-return": 2,
     // Warn against nested then() or catch() statements
-    "promise/no-nesting": 1
+    "promise/no-nesting": 1,
+    "prettier/prettier": "error"
   }
 }
