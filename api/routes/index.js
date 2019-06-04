@@ -18,6 +18,8 @@ const rawBodyOptions = {
     limit: '8mb',
   },
 };
+
+
 router.post('/client/access-token', userAuth.generateAccessToken);
 
 router.post('/send', isTokenValid, firebaseAdminController.sendNotifications);
