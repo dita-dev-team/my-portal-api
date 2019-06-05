@@ -15,4 +15,4 @@ credentials.tar
 yarn.lock
 /service-account.json
 /.env
-env.js
+test/env.js

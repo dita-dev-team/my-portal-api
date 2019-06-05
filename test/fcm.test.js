@@ -4,7 +4,7 @@ const server = require('../server');
 let assert = require('chai').assert;
 const connectFirebase = require('./firebase');
 const firebase = require('firebase');
-
+const messagesModel = require('../api/model/database');
 let accessToken = null;
 
 before(async () => {
