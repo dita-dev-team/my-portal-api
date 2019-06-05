@@ -30,7 +30,7 @@ exports.sendNotifications = async (req, res, next) => {
         body: messageBody,
       },
     },
-    topic: 'debug',
+    topic: messageTopic,
   };
 
   let logNotification = async function(email, title, body, topic, status) {
