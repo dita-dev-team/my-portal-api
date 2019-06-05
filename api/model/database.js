@@ -1,7 +1,9 @@
 const moment = require('moment');
 const db = require('./abstract.database');
 
-const messagesCollection = db.collection(process.env.NODE_ENV === 'test' ? 'messages_test' : 'messages');
+const messagesCollection = db.collection(
+  process.env.NODE_ENV === 'test' ? 'messages_test' : 'messages',
+);
 const examCollection = db.collection(
   process.env.NODE_ENV === 'test' ? 'exam_schedule_test' : 'exam_schedule',
 );
@@ -17,7 +19,7 @@ exports.saveNotification = (email, title, body, topic, status) => {
   });
 };
 
-exports.clearMessagesDatabase = ()=>{
+exports.clearMessagesDatabase = () => {
   let utils = new Utils();
   let batchSize = 100;
   let query = messagesCollection.orderBy('email').limit(batchSize);
@@ -38,7 +40,6 @@ exports.clearExamSchedule = () => {
   let query = examCollection.orderBy('__name__').limit(batchSize);
   return utils.deleteQueryBatch(db, query, batchSize);
 };
-
 
 exports.setExamSchedule = units => {
   let utils = new Utils();

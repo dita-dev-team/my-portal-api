@@ -19,7 +19,6 @@ const rawBodyOptions = {
   },
 };
 
-
 router.post('/client/access-token', userAuth.generateAccessToken);
 
 router.post(
