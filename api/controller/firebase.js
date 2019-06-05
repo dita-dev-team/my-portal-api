@@ -25,6 +25,10 @@ exports.sendNotifications = async (req, res, next) => {
         icon: 'stock_ticker_update',
         color: '#1D1124',
       },
+      data: {
+        title: messageTitle,
+        body: messageBody,
+      },
     },
     topic: 'debug',
   };
