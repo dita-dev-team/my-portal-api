@@ -5,7 +5,7 @@ require('dotenv').config();
 let JWT_SECRET;
 try {
   const functions = require('firebase-functions');
-  _SECRET = functions.config().jwt.key;
+  JWT_SECRET = functions.config().jwt.key;
 } catch (e) {
   JWT_SECRET = process.env.JWT_SECRET;
 }

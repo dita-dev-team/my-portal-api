@@ -19,6 +19,17 @@ const rawBodyOptions = {
   },
 };
 
+let BASIC_USERNAME;
+let BASIC_PASSWORD;
+try {
+  const functions = require('firebase-functions');
+  BASIC_USERNAME = functions.config().hook.username;
+  BASIC_PASSWORD = functions.config().hook.password;
+} catch (e) {
+  BASIC_USERNAME = process.env.BASIC_USERNAME;
+  BASIC_PASSWORD = process.env.BASIC_PASSWORD;
+}
+
 router.post('/client/access-token', userAuth.generateAccessToken);
 
 router.post(
@@ -46,7 +57,7 @@ router.get('/units', unitsController.getUnits);
 router.post(
   '/hooks',
   basicAuth({
-    users: { admin: 'supersecret' },
+    users: { [BASIC_USERNAME]: BASIC_PASSWORD },
   }),
   outlookController.webHook,
 );
