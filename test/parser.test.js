@@ -386,4 +386,29 @@ describe('Test Reading & Parsing extractData()', () => {
       ),
     );
   });
+
+  it('May 2019 is parsed successfully', () => {
+    let data = fs.readFileSync('test/files/excel-new7.xls');
+    let excelParser = new ExcelParser();
+    excelParser.extractData(data);
+    assert.isNotNull(excelParser.units);
+    assert.isNotEmpty(excelParser.units);
+    assert.isTrue(
+      hasNames(
+        excelParser.units,
+        'ENH-227A',
+        'MUS-419A',
+        'MIS-414A',
+        'COM-321T',
+        'DICT-109T',
+        'DBM-021T',
+        'COM-099T',
+        'DGE-109U',
+        'GRW-611X',
+        'CHD-644X',
+        'MME-609X',
+        'GRA-610Z',
+      ),
+    );
+  });
 });
