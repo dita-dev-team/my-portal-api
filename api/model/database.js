@@ -53,19 +53,31 @@ exports.setExamSchedule = units => {
 
 exports.getExamSchedule = async names => {
   let queries = names.map(name => {
-    return examCollection
-      .where('name', '==', name)
-      .limit(1)
-      .get();
+    return (
+      examCollection
+        .where('name', '==', name)
+        // .limit(1)
+        .get()
+    );
   });
+  let data = [];
   let results = await Promise.all(queries);
-  let data = results
-    .filter(result => !result.empty)
-    .map(result => result.docs[0].data());
-  for (let item of data) {
-    let temp = moment(item.date.toDate());
-    item.date = temp.format('YYYY-MM-DD HH:mm:ss');
+  results = results.filter(result => !result.empty);
+  for (let result of results) {
+    result.forEach(doc => {
+      let item = doc.data();
+      let temp = moment(item.date.toDate());
+      item.date = temp.format('YYYY-MM-DD HH:mm:ss');
+      data.push(item);
+    });
   }
+  // let data = results
+  //   .filter(result => !result.empty)
+  //   .map(result => result.docs[0].data());
+  // for (let item of data) {
+  //   let temp = moment(item.date.toDate());
+  //   item.date = temp.format('YYYY-MM-DD HH:mm:ss');
+  // }
   return data;
 };
 
