@@ -23,8 +23,6 @@ const database = proxyquire('../api/model/database', {
   '@global': true,
 });
 
-let accessToken = null;
-
 before(async () => {
   await firebase.loadFirestoreRules({ projectId, rules });
 });

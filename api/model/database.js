@@ -26,12 +26,12 @@ exports.clearMessagesDatabase = () => {
   return utils.deleteQueryBatch(db, query, batchSize);
 };
 
-exports.fetchAllNotifications = () => {
-  return messagesCollection.get();
+exports.fetchAllNotifications = async () => {
+  return await messagesCollection.get().docs;
 };
 
-exports.fetchNotificationsByEmail = email => {
-  return messagesCollection.where('email', '==', email).get();
+exports.fetchNotificationsByEmail = async email => {
+  return await messagesCollection.where('email', '==', email).get().docs;
 };
 
 exports.clearExamSchedule = () => {

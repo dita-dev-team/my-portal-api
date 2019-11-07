@@ -1,18 +1,40 @@
+const fs = require('fs');
 const request = require('supertest');
 const server = require('../server');
+const proxyquire = require('proxyquire').noCallThru();
 const chai = require('chai');
 const expect = chai.expect;
-const database = require('../api/model/database');
+
 chai.use(require('chai-like'));
 chai.should();
 chai.use(require('chai-things'));
+
+const firebase = require('@firebase/testing');
+
+const email = 'test@gmail.com';
+const uid = 'test';
+const projectId = 'exam-timetable-test';
+const rules = fs.readFileSync('firestore.rules', 'utf8');
+
+function authedApp(auth) {
+  return firebase.initializeTestApp({ projectId, auth }).firestore();
+}
+
+const database = proxyquire('../api/model/database', {
+  '../api/model/abstract.database': authedApp({ uid: uid, email: email }),
+  '@global': true,
+});
+
+before(async () => {
+  await firebase.loadFirestoreRules({ projectId, rules });
+});
 
 afterEach(() => {
   server.close();
 });
 
 after(async () => {
-  await database.clearExamSchedule();
+  await Promise.all(firebase.apps().map(app => app.delete()));
 });
 
 describe('Test Unit API calls', () => {
