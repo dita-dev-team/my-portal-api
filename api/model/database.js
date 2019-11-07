@@ -1,16 +1,12 @@
 const moment = require('moment');
 const db = require('./abstract.database');
 
-const messagesCollection = db.collection(
-  process.env.NODE_ENV === 'test' ? 'messages_test' : 'messages',
-);
-const examCollection = db.collection(
-  process.env.NODE_ENV === 'test' ? 'exam_schedule_test' : 'exam_schedule',
-);
+const messagesCollection = db.collection('messages');
+const examCollection = db.collection('exam_schedule');
 const Utils = require('./utils/utils');
 
-exports.saveNotification = (email, title, body, topic, status) => {
-  return messagesCollection.add({
+exports.saveNotification = async (email, title, body, topic, status) => {
+  return await messagesCollection.add({
     email: email,
     title: title,
     body: body,
@@ -27,11 +23,13 @@ exports.clearMessagesDatabase = () => {
 };
 
 exports.fetchAllNotifications = async () => {
-  return await messagesCollection.get().docs;
+  return (await messagesCollection.get().docs) || [];
 };
 
 exports.fetchNotificationsByEmail = async email => {
-  return await messagesCollection.where('email', '==', email).get().docs;
+  return (
+    (await messagesCollection.where('email', '==', email).get().docs) || []
+  );
 };
 
 exports.clearExamSchedule = () => {

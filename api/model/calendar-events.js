@@ -1,22 +1,14 @@
 const database = require('./abstract.database');
-let parentCollection = database.collection(
-  process.env.NODE_ENV === 'test' ? 'calendar_tests' : 'calendar',
-);
+let parentCollection = database.collection('calendar');
 const Utils = require('./utils/utils');
 
 exports.fetchCalendarEvents = async () => {
   try {
-    let documentsArray = [];
-    let fetchedParentDocuments = await parentCollection.get();
-    fetchedParentDocuments.forEach(documents => {
-      documentsArray.push(documents.id);
-    });
-    let eventsParentDocument = parentCollection.doc(
-      process.env.NODE_ENV === 'test' ? 'eventspath' : documentsArray[0],
-    );
-    let eventSubCollection = await eventsParentDocument.getCollections();
-
-    return await eventSubCollection[0].get();
+    const parentDoc = parentCollection.doc('eventspath');
+    if (parentDoc === undefined) {
+      return [];
+    }
+    return await parentDoc.collection('events').get();
   } catch (e) {
     console.error('Error Fetching Calendar Events', e.message);
   }

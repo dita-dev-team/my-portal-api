@@ -32,6 +32,7 @@ after(async () => {
 });
 
 afterEach(() => {
+  sinon.restore();
   server.close();
 });
 
@@ -67,3 +68,5 @@ describe('Test Excel API calls', () => {
       .expect(200, 'Success.', done);
   });
 });
+
+sinon.restore();

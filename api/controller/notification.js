@@ -3,11 +3,6 @@ const database = require('../model/database');
 exports.fetchPushNotifications = async (req, res, nex) => {
   try {
     const pushNotifications = await database.fetchAllNotifications();
-    if (pushNotifications.length === 0) {
-      return res.status(404).send({
-        message: 'No notifications found',
-      });
-    }
     const messages = pushNotifications.map(message => {
       return {
         emailAddress: message.email,
@@ -44,12 +39,6 @@ exports.fetchNotificationByEmailAddress = async (req, res, next) => {
     const fetchedMessages = await database.fetchNotificationsByEmail(
       emailAddress,
     );
-
-    if (fetchedMessages.length === 0) {
-      return res.status(404).send({
-        message: 'No Notifications Sent By that Email',
-      });
-    }
     const messages = await fetchedMessages.map(message => {
       return {
         emailAddress: message.email,
