@@ -3,11 +3,11 @@ node_js:
 - '8'
 dist: trusty
 before_install:
-# - openssl aes-256-cbc -K $encrypted_cc97d3c1c96f_key -iv $encrypted_cc97d3c1c96f_iv
-#   -in credentials.tar.enc -out credentials.tar -d
-# - tar xvf credentials.tar
-# - mkdir -p api/config
-# - cp service-account.json api/config
+- openssl aes-256-cbc -K $encrypted_cc97d3c1c96f_key -iv $encrypted_cc97d3c1c96f_iv
+  -in credentials.tar.enc -out credentials.tar -d
+- tar xvf credentials.tar
+- mkdir -p api/config
+- cp service-account.json api/config
 - yarn add firebase-tools
 - firebase setup:emulators:firestore
 - firebase emulators:exec  "yarn test"
