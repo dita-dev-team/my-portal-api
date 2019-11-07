@@ -10,6 +10,5 @@ before_install:
 - cp service-account.json api/config
 - yarn add firebase-tools
 - firebase setup:emulators:firestore
-- firebase emulators:exec  "yarn test"
 before_script: yarn install
-script: yarn test
+script: firebase emulators:exec  "yarn test"
