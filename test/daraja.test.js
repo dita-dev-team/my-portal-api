@@ -98,7 +98,7 @@ let cancelledTransactionRequestBody = {
   },
 };
 
-describe('Testing Daraja Api endpoints', () => {
+describe.skip('Testing Daraja Api endpoints', () => {
   it('it should return (404) on invalid endpoints', done => {
     request(server)
       .get('/api/v1/process/payment')
@@ -160,7 +160,7 @@ describe('Testing Daraja Api endpoints', () => {
   });
 });
 
-describe("Testing Daraja's Callback Endpoint", () => {
+describe.skip("Testing Daraja's Callback Endpoint", () => {
   it('it should return (400) Bad request on missing query params', done => {
     request(server)
       .post('/api/v1/process/callback')
