@@ -8,7 +8,7 @@ before_install:
 # - tar xvf credentials.tar
 # - mkdir -p api/config
 # - cp service-account.json api/config
-- yarn install firebase-tools
+- yarn add firebase-tools
 - firebase setup:emulators:firestore
 - firebase setup:emulators:functions
 - firebase emulators:exec  "yarn test"
