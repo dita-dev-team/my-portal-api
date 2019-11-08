@@ -411,4 +411,29 @@ describe('Test Reading & Parsing extractData()', () => {
       ),
     );
   });
+
+  it('August 2019 is parsed successfully', () => {
+    let data = fs.readFileSync('test/files/excel-new8.xls');
+    let excelParser = new ExcelParser();
+    excelParser.extractData(data);
+    assert.isNotNull(excelParser.units);
+    assert.isNotEmpty(excelParser.units);
+    assert.isTrue(
+      hasNames(
+        excelParser.units,
+        'COM-624Y',
+        'MUS-319B',
+        'ACS-332A',
+        'ICC-09U',
+        'DICT-107T',
+        'PSY-211T',
+        'PSY-408T',
+        'DHR-100T',
+        'GRW-611X',
+        'GRA-614X',
+        'MME-610X',
+        'MAK-423X',
+      ),
+    );
+  });
 });

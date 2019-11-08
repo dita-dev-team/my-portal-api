@@ -1,4 +1,4 @@
-const firebaseAdmin = require('firebase-admin');
+const messaging = require('firebase-admin').messaging();
 const database = require('../model/database');
 
 exports.sendNotifications = async (req, res, next) => {
@@ -51,7 +51,7 @@ exports.sendNotifications = async (req, res, next) => {
   };
 
   try {
-    let response = await firebaseAdmin.messaging().send(androidNotification);
+    let response = await messaging.send(androidNotification);
     // Save successful notification
     await logNotification(
       payload.emailAddress,

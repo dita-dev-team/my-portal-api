@@ -67,7 +67,7 @@ describe('/Testing API Calls', () => {
       emailAddress: 'test@gmail.com',
     };
     const messaging = require('firebase-admin').messaging();
-    sinon.stub(messaging, 'send').returns('Notification sent');
+    sinon.stub(messaging, 'send').returns(Promise.resolve('Notification sent'));
     request(server)
       .post('/api/v1/send')
       .send(validRequestBody)
