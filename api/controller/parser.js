@@ -179,6 +179,7 @@ module.exports = class ExcelParser {
     let coursesArray = [];
     // Remove white spaces
     let courseCode = text.replace(/\s/g, '');
+    courseCode = courseCode.replace(/&/g, '/');
     // Correct type AAA111B(X)
     let match = courseCode.match(/(.*)([A-Z]\((.)\))/);
     if (match) {
@@ -191,6 +192,8 @@ module.exports = class ExcelParser {
     let conjoinedClasses = /[a-z]{3,4}[\d]{3}[a-z]{1}\/[a-z]{1}(?:[/]*|.{})/i; // YYY111A/B
 
     let fourJoinedClasses = /[A-Z]{3,4}[\d]{3}(?:\/[\d]{3})*/i; // YYY111/222/333/444
+
+    let doubleJoined = /[A-Z]{3,4}\/[A-Z]{3,4}[\d]{3}[a-z]{1}/i; // AAA/BBB111
 
     coursesArray.push(courseCode);
     if (courseCode.includes('/')) {
@@ -212,6 +215,10 @@ module.exports = class ExcelParser {
         sections.forEach(section => {
           courseCodes.push(prefix.concat(section));
         });
+      } else if (courseCode.match(doubleJoined)) {
+        // handle AAA/BBB111
+        courseCodes = courseCode.split('/');
+        courseCodes[0] = courseCodes[0].concat(courseCodes[1].substr(3));
       } else if (courseCode.match(fourJoinedClasses)) {
         // handle type YYY111/222/333/444
         let prefix = courseCode.substr(0, 3);

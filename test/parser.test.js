@@ -458,4 +458,27 @@ describe('Test Reading & Parsing extractData()', () => {
       ),
     );
   });
+
+  it('June 2020 is parsed successfully', () => {
+    let data = fs.readFileSync('test/files/excel-new10.xls');
+    let excelParser = new ExcelParser();
+    excelParser.extractData(data);
+    assert.isNotNull(excelParser.units);
+    assert.isNotEmpty(excelParser.units);
+    assert.isTrue(
+      hasNames(
+        excelParser.units,
+        'EEE-221A',
+        'MAK-426A',
+        'DICT-105A',
+        'EDU-514T',
+        'DBM-021T',
+        'PSY-657X',
+        'COM-302X',
+        'PSY-644X',
+        'CHD-644X',
+        'PSY-211X',
+      ),
+    );
+  });
 });
